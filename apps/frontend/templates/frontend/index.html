@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/chatbot.css' %}" rel="stylesheet">
+    <title>ChatBot NW</title>
+</head>
+
+<body>
+
+    <section class="chat">
+
+        <div>
+            <ul name="msgs">
+                <li><strong>chatbot:</strong><br><p>Hola preguntame lo que necesites saber de ia</p></li>
+            </ul>
+
+            <form>
+                <input type="entry" name="caja">
+                <input type="submit">
+            </form>
+            
+        </div>
+
+    </section>
+
+</body>
+
+<script>
+    const form = document.querySelector('form');
+    
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const dato = document.getElementsByName("caja")[0].value;
+
+        const ul = document.getElementsByName('msgs')[0];
+        
+        const nuevoLi = document.createElement('li');
+        const nuevoBr = document.createElement('br');
+        const nuevoP = document.createElement('p');
+        const nuevoStrong = document.createElement('strong');
+
+        nuevoLi.appendChild(nuevoBr);
+        nuevoLi.appendChild(nuevoStrong);
+        nuevoLi.appendChild(nuevoP);
+        nuevoStrong.textContent = `usuario:`;
+        nuevoLi.style='background-color: rgb(198, 212, 188)'
+        nuevoP.textContent = `${dato}`;
+
+        ul.appendChild(nuevoLi);
+
+        const response = await fetch('http://127.0.0.1:8000/api', {
+            method: "POST",
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify({msg:dato}),
+        }).then((result)=>{
+            const json = result.json();
+            return json;
+        }).then((data)=>{
+            const nuevoBr = document.createElement('br');
+            const nuevoLi2 = document.createElement('li');
+            const nuevoP = document.createElement('p');
+            const nuevoStrong = document.createElement('strong');
+            const json = JSON.parse(data['msg']);
+            const valor = Object.values(json);
+
+            nuevoStrong.textContent = `chatbot:`;
+            nuevoLi2.style='background-color: #b88efc'
+            nuevoP.textContent = `${valor}`;
+            nuevoLi2.appendChild(nuevoBr);
+            nuevoLi2.appendChild(nuevoStrong);
+            nuevoLi2.appendChild(nuevoP);
+            nuevoLi.appendChild(nuevoLi2);
+        });
+
+    });
+</script>
+</html>
