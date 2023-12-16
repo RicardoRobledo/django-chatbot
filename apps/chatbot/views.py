@@ -1,7 +1,7 @@
 from django.conf import settings
+from django.http import JsonResponse
 
 from rest_framework.views import APIView
-from rest_framework.response import Response
 
 from openai import OpenAI
 
@@ -9,10 +9,8 @@ from openai import OpenAI
 class Openai(APIView):
     """
     This class use chatgpt
-
-    :param : list
     """
-    def get(self, request, format=None):
+    def post(self, request, format=None):
 
         client = OpenAI(
             api_key=settings.OPENAI_API_KEY,
@@ -23,9 +21,9 @@ class Openai(APIView):
             response_format={ "type": "json_object" },
             messages=[
                     {"role": "system", "content": "eres un experto en ia que contesta preguntas solo de temas relacionados a ella"},
-                    {"role": "user", "content": f"{request.GET['msg']} Responde con un json y que el valor tenga todo el texto"}
+                    {"role": "user", "content": f"{request.data['msg']} Responde con un json y que el valor tenga todo el texto"}
                 ]
             )
         
         msg = chat_completion.choices[0].message.content
-        return Response(msg)
+        return JsonResponse({'msg':msg})

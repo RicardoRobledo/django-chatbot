@@ -53,13 +53,18 @@
 
         ul.appendChild(nuevoLi);
 
-        const response = await fetch('http://127.0.0.1:8000/api', {
+        
+        const response = await fetch('http://127.0.0.1:8000/api/chatbot/', {
             method: "POST",
             redirect: "follow",
             referrerPolicy: "no-referrer",
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify({msg:dato}),
-        }).then((result)=>{
-            const json = result.json();
+        }).then(async (result)=>{
+            const json = await result.json();
+            console.log(json);
             return json;
         }).then((data)=>{
             const nuevoBr = document.createElement('br');
