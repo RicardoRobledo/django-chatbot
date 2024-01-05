@@ -315,7 +315,7 @@ async function getResponse(prompt) {
 
 	try {
 		const randomID = generateUniqueID();
-		source = new SSE('http://127.0.0.1:8000/api/chatbot/', { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, payload: params, method: 'POST' });
+		source = new SSE('https://django-chatbot-jmnq.onrender.com/api/chatbot/', { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, payload: params, method: 'POST' });
 		streamChat(source, randomID);
 		source.stream();
 
