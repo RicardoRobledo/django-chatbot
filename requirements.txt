@@ -4,7 +4,7 @@ asgiref==3.7.2
 certifi==2023.11.17
 colorama==0.4.6
 distro==1.8.0
-Django==3.2.1
+Django==5.0
 djangorestframework==3.14.0
 exceptiongroup==1.2.0
 gunicorn==21.2.0
@@ -14,7 +14,6 @@ httpx==0.25.2
 idna==3.6
 openai==1.4.0
 packaging==23.2
-psycopg2==2.9.9
 pydantic==2.5.2
 pydantic_core==2.14.5
 python-decouple==3.8

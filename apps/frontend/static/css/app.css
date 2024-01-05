@@ -1003,3 +1003,24 @@ footer img:hover{
         min-height: 300px;
     }
 }
+
+
+.file-card-container{
+    background-color: rgb(194, 194, 194);
+    border-radius: 5px;
+    margin-inline: 10px;
+    margin-top: 5px;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.file-card{
+}
+
+.file-card-button button{
+    border: none;
+    background-color: transparent;
+    color: inherit;
+}

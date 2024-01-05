@@ -140,8 +140,7 @@ function loadData(url, urls) {
 				$("#microphone-button").show()
 			}
 			// Populate array_employees with character data and create HTML elements for each character card
-			$("#load-character").html("");
-			$(".ai-contacts-scroll").html("");
+			$("#load-character").html("hello");
 
 			// Get chat history and update the last_chat property for each character
 			if (chat_history) {
@@ -184,12 +183,49 @@ function loadData(url, urls) {
     </div>
 `);
 
-//$("#chat").val("");
-$("#chat").attr("max_length", chat_maxlength);
-$('#chat').attr('placeholder', 'Escribe aquí');
+    //$("#chat").val("");
+    $("#chat").attr("max_length", chat_maxlength);
+    $('#chat').attr('placeholder', 'Escribe aquí');
+
+    /*$(".ai-contacts-top").html(`
+      <h4>Sube archivos</h4>
+      <input type="file">
+	  <button>Subir archivos</button>
+    `)
+
+	id = 0;
+
+	$(".ai-contacts-top input[type='file']").on("change", function(event) {
+		// Aquí puedes hacer lo que quieras con el archivo, por ejemplo:
+		const file = event.target.files[0]; // Obtén el archivo seleccionado
+
+		$(".ai-contacts-scroll").append(`
+		    <div class="file-card-container" id=${id}>
+			    <div class="file-card">
+				  <img width="30px" height="30px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Icon_pdf_file.svg/1200px-Icon_pdf_file.svg.png">
+			      <h7>${file.name.substring(0, 23)}...</h7>
+				</div>
+			    <div class="file-card-button">
+			      <button onclick="eliminarArchivo('${id}')">
+			        <img width="30px" height="30px" src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png">
+			      </button>
+				<div>
+			</div>
+			<br>
+		`);
+		id++;
+
+	});*/
 
 	}).catch(err => { throw err })
 }
+
+//archivos = [];
+
+/*function eliminarArchivo(id) {
+	$(`#${id}`).remove();
+	console.log()
+}*/
 
 function currentDate() {
 	const timestamp = new Date();

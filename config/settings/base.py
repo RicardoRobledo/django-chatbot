@@ -133,9 +133,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'apps/frontend/static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+PATH_CSV_FILE = 'files/'
 
 # ---------------------Openai------------------------
 
 OPENAI_API_KEY = config('OPENAI_API_KEY')
+ASSISTANT_MODEL = config('ASSISTANT_MODEL')
+EMBEDDINGS_MODEL = config('EMBEDDINGS_MODEL')
 
 # ---------------------------------------------------

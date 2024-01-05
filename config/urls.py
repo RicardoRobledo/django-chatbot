@@ -25,6 +25,6 @@ urlpatterns = [
 
     path('frontend-chatbot/', include('apps.frontend.urls')),
     
-    path('api/chatbot/', include('apps.chatbot.urls')),
+    path('api/chatbot/', include('apps.chatbot.controllers.routers.urls')),
     path('api-auth/', include('rest_framework.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
