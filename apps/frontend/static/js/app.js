@@ -49,7 +49,8 @@ let array_messages = [];
 let array_voices = [];
 let filterBotWords = ["Robot:", "Bot:"];
 
-let base_url = 'https://django-chatbot-491c.onrender.com/api/';
+//let base_url = 'https://django-chatbot-491c.onrender.com/api/';
+let base_url = 'http://127.0.0.1:8000/api/';
 let data_procedures = [];
 let procedure = '';
 let index_procedure = 0;
@@ -197,7 +198,7 @@ function loadData(url, urls) {
 		${audio_in_chat}            
 	<div class="user-name"><h5>${employee_name}</h5></div>
 	  <div class="message-text">
-		<div class="chat-response">${'¿Que tal?, Selecciona un trámite de la izquierda sobre el que tengas dudas'}</div>
+		<div class="chat-response">${'¿Que tal?, Selecciona un trámite sobre el que tengas dudas'}</div>
 	  </div>
 		<div class="date-chat"><img src="../../static/img/icon-clock.svg"> ${current_date}</div>
 	</div>
@@ -221,7 +222,7 @@ function loadData(url, urls) {
 `);
 
     $(".ai-contacts-top").html(`
-      <h4>Buscar trámite:</h4>
+	  <strong style="color: black">Busca y selecciona un trámite:</strong>
       <input type="text">
     `)
 
@@ -254,11 +255,46 @@ function loadData(url, urls) {
 	$("#welcome-message").show();
 	$("#first-message").hide();
 	$(".btn-send-chat").hide();
+	$("#menu").hide();
+
+	// obtener thread de conversacion
+	$.ajax({
+		url: `${base_url}chatbot/thread/`,
+		type: 'POST', // o 'POST' u otro método HTTP según tus necesidades
+		dataType: 'json', // el tipo de datos que esperas recibir del servidor
+		success: function(data) {
+		  localStorage.setItem('thread_id', data['thread_id']);
+		},
+		error: function(error) {
+		  // Maneja el error en la petición
+		  console.error('Error en la petición:', error);
+		}
+	  });
 
 	}).catch(err => { throw err })
 }
 
 //archivos = [];
+
+function deactivateChat(){
+	$("#chat").prop("disabled", true);
+	$("#microphone-button").hide();
+	$("#welcome-message").show();
+	$("#first-message").hide();
+	$(".btn-send-chat").hide();
+	$("#menu").hide();
+}
+
+
+function activateChat(){
+	$(".col-contacts-border").hide();
+	$("#chat").prop("disabled", false);
+	$("#microphone-button").show();
+	$(".btn-send-chat").show();
+	$("#welcome-message").hide()
+	$("#first-message").show();
+	$("#menu").show();
+}
 
 
 // -------------------------------------------------
@@ -317,31 +353,58 @@ function select_procedure(index, text){
 
 	index_procedure = index;
 
-	$(".col-contacts-border").css("display", "none");
-	$("#chat").prop("disabled", false);
-	$("#microphone-button").show();
-	$(".btn-send-chat").show();
-	$("#welcome-message").hide()
-	$("#first-message").show();
+	activateChat();
 
 	var contenidoOriginal = $("#message-procedure").text();
 	var contenidoModificado = contenidoOriginal.replace("{procedure}", text);
 	$("#message-procedure").text(contenidoModificado);
+	$("#menu").show();
 
-	$.ajax({
-		url: `${base_url}chatbot/thread/`,
-		type: 'POST', // o 'POST' u otro método HTTP según tus necesidades
-		dataType: 'json', // el tipo de datos que esperas recibir del servidor
-		success: function(data) {
-		  localStorage.setItem('thread_id', data['thread_id']);
-		},
-		error: function(error) {
-		  // Maneja el error en la petición
-		  console.error('Error en la petición:', error);
-		}
-	  });
+	$("#overflow-chat").empty();
+	$("#overflow-chat").append(`
+	<div class="conversation-thread thread-ai" id="first-message">
+        ${avatar_in_chat}
+	  <div class="message-container">
+	    <div class="message-info">
+		    ${copy_text_in_chat}
+		    ${audio_in_chat}            
+	    <div class="user-name"><h5>${employee_name}</h5></div>
+	        <div class="message-text">
+		    <div class="chat-response" id="message-procedure">${welcome_message} {procedure}</div>
+	    </div>
+		    <div class="date-chat"><img src="../../static/img/icon-clock.svg"> ${current_date}</div>
+	    </div>
+      </div>
+    </div>`);
+	var contenidoOriginal = $("#message-procedure").text();
+	var contenidoModificado = contenidoOriginal.replace("{procedure}", data_procedures[index_procedure].text);
+	$("#message-procedure").text(contenidoModificado);
 
 }
+
+$('#menu').on('click', function() {
+	$(".col-contacts-border").show();
+	$("#menu").hide();
+	deactivateChat();
+	$("#message-procedure").text();
+
+	$("#overflow-chat").empty();
+	$("#overflow-chat").append(`
+    <div class="conversation-thread thread-ai" id="welcome-message">
+      ${avatar_in_chat}
+	    <div class="message-container">
+	    <div class="message-info">
+		    ${copy_text_in_chat}
+		    ${audio_in_chat}            
+	    <div class="user-name"><h5>${employee_name}</h5></div>
+	      <div class="message-text">
+		    <div class="chat-response">${'¿Que tal?, Selecciona un trámite sobre el que tengas dudas'}</div>
+	      </div>
+		    <div class="date-chat"><img src="../../static/img/icon-clock.svg"> ${current_date}</div>
+	    </div>
+      </div>
+    </div>`);
+});
 
 /*function eliminarArchivo(id) {
 	$(`#${id}`).remove();
